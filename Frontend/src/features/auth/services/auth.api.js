@@ -11,3 +11,7 @@ export const registerUser = (data) => {
 export const getUser = () => {
     return api.get("/auth/get-me");
 };
+
+export const logoutUser = () => {
+    return api.get("/auth/logout");
+}

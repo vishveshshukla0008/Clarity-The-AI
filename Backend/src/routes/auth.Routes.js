@@ -19,6 +19,9 @@ authRouter.post("/login", loginValidation, authController.loginUserController);
 authRouter.get("/get-me", identifyUser, authController.getUserController);
 
 authRouter.get("/forget-password", emailValidator, authController.sendForgetPasswordEmailController);
+
 authRouter.get("/reset-password/:token", passwordValidator, authController.resetAuthPasswordController);
+
+authRouter.get("/logout", identifyUser, authController.logoutUserController);
 
 export default authRouter;

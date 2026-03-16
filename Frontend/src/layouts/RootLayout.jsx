@@ -4,8 +4,8 @@ import { Outlet } from "react-router";
 
 export default function RootLayout() {
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="mx-auto w-full max-w-350  h-fit">
+    <div className="min-h-screen  text-white bg-[#11111a] no-scrollbar">
+      <div className="mx-auto w-full max-w-350 ">
         <Toaster position="top-right" />
         <Navbar />
         <Outlet />

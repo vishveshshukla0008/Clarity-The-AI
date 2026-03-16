@@ -8,6 +8,7 @@ import {
   sendVerificationConfirmationEmail,
   sendVerificationEmail,
 } from "../services/auth.service.js";
+import { getRedis } from "../config/cache.js";
 
 /***
  * @route POST /api/auth/register
@@ -225,6 +226,55 @@ const resetAuthPasswordController = asyncWrapper(async (req, res) => {
 })
 
 
+
+
+/***
+ * @route GET /api/auth/logout
+ * @description After verifing the user is loggedin this controller logouts the user from the server !
+ * @access  protected
+ */
+
+
+const logoutUserController = asyncWrapper(async (req, res) => {
+
+    const token = req.cookies.token;
+
+    if (!token) {
+        throw new AppError(400, "User already logged out");
+    }
+
+    const redis = getRedis();
+
+    let decoded;
+
+    try {
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch {
+        res.clearCookie("token");
+        throw new AppError(401, "Invalid token");
+    }
+
+    const ttl = decoded.exp - Math.floor(Date.now() / 1000);
+
+    if (ttl > 0) {
+        await redis.set(`blacklist:${token}`, "true", "EX", ttl);
+    }
+
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict"
+    });
+
+    req.user = null;
+
+    res.status(200).json({
+        success: true,
+        message: "Logout successful"
+    });
+});
+
+
 export const authController = {
   registerNewUserController,
   verificationUserEmailController,
@@ -232,5 +282,6 @@ export const authController = {
   loginUserController,
   getUserController,
   sendForgetPasswordEmailController,
-  resetAuthPasswordController
+  resetAuthPasswordController,
+  logoutUserController
 };
