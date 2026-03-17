@@ -1,7 +1,7 @@
 import { body, validationResult } from "express-validator";
 import AppError from "../utils/AppError.js";
 
-const validater = (req, res, next) => {
+const validator = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -50,7 +50,7 @@ export const registerValidation = [
     .withMessage("Fullname cannot exceed 20 characters")
     .trim(),
 
-  validater,
+  validator,
 ];
 
 export const emailValidator = [
@@ -60,7 +60,7 @@ export const emailValidator = [
     .isEmail()
     .withMessage("Please enter a valid email")
     .normalizeEmail(),
-  validater,
+  validator,
 ];
 
 export const loginValidation = [
@@ -84,7 +84,7 @@ export const loginValidation = [
     )
     .trim(),
 
-  validater,
+  validator,
 ];
 
 export const passwordValidator = [
@@ -100,5 +100,5 @@ export const passwordValidator = [
       "Password must contain uppercase, lowercase, number, and special character",
     )
     .trim(),
-  validater,
+  validator,
 ];
