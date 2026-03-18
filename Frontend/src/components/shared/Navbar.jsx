@@ -89,7 +89,18 @@ const Navbar = () => {
             </DropdownMenu>
           ) : (
             <Button className="px-5 bg-transparent hover:text-white text-gray-200">
-              <Link to={"/login"}>Sign in</Link>
+              <NavLink to={"/login"}
+                className={({ isActive, isPending }) =>
+                  `transition-all duration-200 ${
+                    isPending
+                      ? "text-red-500"
+                      : isActive
+                        ? "text-white font-semibold"
+                        : "text-gray-400 hover:text-white"
+                  }`
+                }>
+                Sign in
+              </NavLink>
             </Button>
           )}
 

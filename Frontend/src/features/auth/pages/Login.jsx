@@ -48,10 +48,10 @@ const Login = () => {
   return !loading && user ? (
     <Navigate to="/" />
   ) : (
-    <div className="relative min-h-screen  w-full flex justify-center pt-15 pb-10">
-      <div className="absolute inset-0 brightness-50 bg-[url('/images/scene.jpg')] bg-cover bg-center blur-xs"></div>
+    <div className="relative min-h-180 w-full flex justify-center items-center py-10">
+      <div className="absolute h-full inset-0 brightness-50 bg-[url('/images/scene.jpg')] bg-cover bg-center blur-xs"></div>
 
-      <div className="relative z-10 w-[90%] inset-0 md:w-[70%] lg:w-1/3 flex flex-col gap-4 items-center bg-[#020206] shadow-sm shadow-gray-600  px-6 py-4 rounded-xl">
+      <div className="relative z-10 w-[90%] inset-0 md:w-[70%] lg:w-1/3 flex flex-col gap-4 items-center bg-[#020206] shadow-sm shadow-gray-600 h-fit  px-6 py-4 rounded-xl">
         {/* TEXT PART (unchanged) */}
         <div className="upper-text w-full flex flex-col pt-5 gap-4 items-center">
           <h1 className="text-3xl">Clarity</h1>
