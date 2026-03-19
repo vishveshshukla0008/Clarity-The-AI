@@ -1,9 +1,8 @@
-import AuthLoader from "@/features/auth/components/authLoader";
 import ProtectedAuth from "@/features/auth/components/ProtectedAuth";
 import Login from "@/features/auth/pages/Login";
 import Signup from "@/features/auth/pages/Signup";
 import VerifyEmail from "@/features/auth/pages/VerifyEmail";
-import Dashboard from "@/features/chat/pages/Dashboard";
+import ChatDashboard from "@/features/chat/pages/ChatDashboard";
 import About from "@/landing/pages/About";
 import Home from "@/landing/pages/Home";
 import RootLayout from "@/layouts/RootLayout";
@@ -37,6 +36,10 @@ export const router = createBrowserRouter([
         path: "/about",
         element: <About />,
       },
+      {
+        path : "/dashboard", 
+        element : <ChatDashboard/>
+      }
     ],
   },
 ]);

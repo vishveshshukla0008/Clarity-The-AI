@@ -27,7 +27,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="w-full bg-linear-to-r from-[#11111a] via-[#0d0d15] to-[#11111a]  border-white/10">
+    <nav className="sticky z-100 top-0 w-full bg-linear-to-r from-[#11111a] via-[#0d0d15] to-[#11111a]  border-white/10">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-3 text-xl md:text-2xl font-extrabold text-white">
           <LoaderPinwheel className="size-6 md:size-8" />
