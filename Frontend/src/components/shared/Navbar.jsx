@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Button } from "../ui/button";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 
@@ -20,14 +20,12 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "Home", path: "/" },
-    { name: "Pricing", path: "/pricing" },
+    { name: "AI Dashboard", path: "/dashboard" },
     { name: "About", path: "/about" },
-    { name: "Careers", path: "/careers" },
-    { name: "Docs", path: "/docs" },
   ];
 
   return (
-    <nav className="sticky z-100 top-0 w-full bg-linear-to-r from-[#11111a] via-[#0d0d15] to-[#11111a]  border-white/10">
+    <nav className="sticky top-0 z-200 w-full bg-[#11111a]  border-white/10 bg-">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-3 text-xl md:text-2xl font-extrabold text-white">
           <LoaderPinwheel className="size-6 md:size-8" />
@@ -67,14 +65,9 @@ const Navbar = () => {
               <DropdownMenuContent
                 align="end"
                 className="w-48  bg-[#11111a] border border-white/10 text-white">
-                <DropdownMenuItem className="cursor-pointer ">
+                <DropdownMenuItem className="p-2 ">
                   <User className="mr-2 h-4 w-4" />
-                  Profile
-                </DropdownMenuItem>
-
-                <DropdownMenuItem className="cursor-pointer ">
-                  <Settings className="mr-2 h-4 w-4" />
-                  Settings
+                  {user?.fullname}
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
@@ -89,7 +82,8 @@ const Navbar = () => {
             </DropdownMenu>
           ) : (
             <Button className="px-5 bg-transparent hover:text-white text-gray-200">
-              <NavLink to={"/login"}
+              <NavLink
+                to={"/login"}
                 className={({ isActive, isPending }) =>
                   `transition-all duration-200 ${
                     isPending

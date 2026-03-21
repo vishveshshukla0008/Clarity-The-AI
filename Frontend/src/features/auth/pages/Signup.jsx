@@ -64,7 +64,7 @@ const Signup = () => {
 
   return (
     <div className="relative min-h-full w-full flex justify-center py-10">
-      <div className="absolute inset-0 brightness-50 bg-[url('/images/scene.jpg')] bg-cover bg-center blur-xs"></div>
+      <div className="absolute inset-0 brightness-50  bg-cover bg-center blur-xs"></div>
 
       <div className="relative z-10 h-fit w-[90%]  md:w-[70%] lg:w-1/3 flex flex-col gap-4 items-center bg-[#020206] shadow-sm shadow-gray-600  px-6 py-4 rounded-xl">
         {/* TEXT PART (unchanged) */}

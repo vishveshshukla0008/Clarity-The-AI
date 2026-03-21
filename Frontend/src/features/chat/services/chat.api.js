@@ -10,9 +10,9 @@ export const getAllChats = () => {
 
 
 export const getAllChatMessages = (chatId) => {
-    return api.get(`/${chatId}/messages`);
+    return api.get(`/chats/${chatId}/messages`);
 }
 
 export const deleteChat = (chatId) => {
-    return api.delete(`/${chatId}`);
+    return api.delete(`/chats/${chatId}`);
 }
