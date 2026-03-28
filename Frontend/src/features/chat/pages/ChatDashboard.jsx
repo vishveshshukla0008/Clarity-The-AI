@@ -11,15 +11,15 @@ import { useEffect, useState, useRef } from "react";
 import { useChat } from "../hooks/useChat";
 import { useDispatch, useSelector } from "react-redux";
 import ReactMarkdown from "react-markdown";
-import { setCurrentChatId } from "../chat.slice";
+import { setCurrentChatId, setCurrentModel } from "../chat.slice";
 
 export default function ChatDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [messageInput, setMessageInput] = useState("");
+
   const messagesEndRef = useRef(null);
-  const { chats, isChatLoading, currentChatId, messages } = useSelector(
-    (state) => state.chats,
-  );
+  const { chats, isChatLoading, currentChatId, messages, currentModel } =
+    useSelector((state) => state.chats);
 
   const dispatch = useDispatch();
   const { handleFetchChats, fetchAllMessagesOfChatHandler, handleSendMessage } =
@@ -34,7 +34,6 @@ export default function ChatDashboard() {
     fetchAllMessagesOfChatHandler(currentChatId);
   }, [currentChatId, fetchAllMessagesOfChatHandler]);
 
-  // Auto-scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -47,32 +46,20 @@ export default function ChatDashboard() {
     setMessageInput("");
   };
 
-  // const messages = [
-  //   { role: "user", content: "Hey, what is MERN stack?" },
-  //   {
-  //     role: "ai",
-  //     content: "MERN stack stands for MongoDB, Express, React, and Node.js.",
-  //   },
-  //   { role: "user", content: "Can I build real-time apps with it?" },
-  //   {
-  //     role: "ai",
-  //     content:
-  //       "Yes, you can use WebSockets or libraries like Socket.io to build real-time apps.",
-  //   },
-  // ];
-
   return (
-    <div className="h-screen inset-0 w-full flex bg-[#11111a] overflow-hidden">
-      {/* Sidebar */}
+    <div className="h-screen inset-0 w-full flex bg-[#11111a] overflow-hidden no-scrollbar">
       <aside
-        className={`fixed bottom-0 md:static z-100 top-0 left-0  w-64 bg-[#0d0d12] p-3 transform transition-transform duration-300
+        className={`fixed bottom-0 md:static z-100 top-0 overflow-scroll no-scrollbar left-0  w-64  p-3 transform transition-transform duration-300
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
         <div className="flex justify-between items-center mb-4">
           <div className="flex w-full items-center justify-between">
             <h2 className="text-lg font-bold">Chats</h2>
 
             <button className="flex items-center gap-1 text-sm hover:text-gray-300 transition">
-              <PencilLine onClick={() => dispatch()} size={13} />
+              <PencilLine
+                onClick={() => dispatch(setCurrentChatId(null))}
+                size={13}
+              />
             </button>
           </div>
           <button className="md:hidden" onClick={() => setSidebarOpen(false)}>
@@ -110,8 +97,6 @@ export default function ChatDashboard() {
           )}
         </div>
       </aside>
-
-      {/* Overlay (mobile only) */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-30 md:hidden"
@@ -119,9 +104,7 @@ export default function ChatDashboard() {
         />
       )}
 
-      {/* Main Chat Section */}
-      <div className="flex-1 flex flex-col min-h-screen overflow-hidden">
-        {/* Top Navbar */}
+      <div className="flex-1 flex flex-col min-h-screen overflow-scroll no-scrollbar">
         <div className="md:hidden sticky top-0 z-20 flex items-center justify-between p-4 bg-mauve-950">
           <button onClick={() => setSidebarOpen(true)}>
             <FolderOpenDot />
@@ -130,17 +113,16 @@ export default function ChatDashboard() {
           <div />
         </div>
 
-        {/* Messages Area */}
         {currentChatId ? (
           <>
-            <div className="flex-1 min-h-0 overflow-y-auto p-4 sm:p-6 md:p-8">
+            <div className="flex-1 min-h-0 no-scrollbar overflow-y-auto p-4 sm:p-6 md:p-8">
               <div className="w-full max-w-3xl mx-auto flex flex-col gap-6">
                 {messages.map((msg, i) => (
                   <div
                     key={i}
                     className={`${msg.role === "ai" ? "text-left" : "text-right"}`}>
                     <span
-                      className={`inline-block px-4 py-2 rounded-lg max-w-xs sm:max-w-md md:max-w-2xl text-left break-words ${
+                      className={`inline-block px-4 py-2 rounded-lg max-w-xs sm:max-w-md md:max-w-2xl text-left wrap-break-word ${
                         msg.role === "user"
                           ? "bg-blue-600 text-white"
                           : "bg-gray-700 text-gray-100"
@@ -179,6 +161,28 @@ export default function ChatDashboard() {
                   placeholder="Ask me something..."
                   className="flex-1 bg-gray-800 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
+
+                {/* Model Selector */}
+                <div className="w-28 sm:w-36 ">
+                  <select
+                    onChange={(e) => dispatch(setCurrentModel(e.target.value))}
+                    defaultValue="gemini"
+                    className="w-full bg-gray-800 text-white rounded-lg  sm:px-3 py-2
+      text-xs sm:text-sm md:text-base border-none
+      ">
+                    <option disabled>Select model</option>
+                    <option value="gemini" className="">
+                      Gemini
+                    </option>
+                    <option value="mistral" className="">
+                      Mistral
+                    </option>
+                    <option value="tavily" className="">
+                      Tavily AI Search
+                    </option>
+                  </select>
+                </div>
+
                 <button
                   type="submit"
                   disabled={!messageInput.trim() || isChatLoading}
@@ -203,27 +207,53 @@ export default function ChatDashboard() {
               conversation or select an existing chat from the sidebar.
             </p>
 
-            {/* Empty State Input */}
-            <form onSubmit={handleSubmitMessage} className="w-full max-w-xl">
-              <div className="flex gap-3">
-                <input
-                  type="text"
-                  value={messageInput}
-                  onChange={(e) => setMessageInput(e.target.value)}
-                  placeholder="Ask me something..."
-                  className="flex-1 bg-gray-800 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
-                />
-                <button
-                  type="submit"
-                  disabled={!messageInput.trim() || isChatLoading}
-                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg px-6 py-3 flex items-center gap-2 transition font-medium">
-                  {isChatLoading ? (
-                    <Loader size={20} className="animate-spin" />
-                  ) : (
-                    <Send size={20} />
-                  )}
-                </button>
+            <form
+              onSubmit={handleSubmitMessage}
+              className="w-full max-w-3xl mx-auto flex items-center gap-2 sm:gap-3">
+              {/* Input */}
+              <input
+                type="text"
+                value={messageInput}
+                onChange={(e) => setMessageInput(e.target.value)}
+                placeholder="Ask me something..."
+                className="flex-1 bg-gray-800 text-white rounded-lg px-3 sm:px-4 py-2
+    text-sm sm:text-base
+    focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+
+              {/* Model Selector */}
+              <div className="w-28 sm:w-36 ">
+                <select
+                  onChange={(e) => dispatch(setCurrentModel(e.target.value))}
+                  defaultValue="gemini"
+                  className="w-full bg-gray-800 text-white rounded-lg  sm:px-3 py-2
+      text-xs sm:text-sm md:text-base
+      transition">
+                  <option value="gemini" className="">
+                    Gemini
+                  </option>
+                  <option value="mistral" className="">
+                    Mistral
+                  </option>
+                  <option value="tavily" className="">
+                    Tavily AI Search
+                  </option>
+                </select>
               </div>
+
+              {/* Button */}
+              <button
+                type="submit"
+                disabled={!messageInput.trim() || isChatLoading}
+                className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 
+    text-white rounded-lg px-3 sm:px-4 py-2 
+    flex items-center gap-2 transition">
+                {isChatLoading ? (
+                  <Loader size={18} className="animate-spin" />
+                ) : (
+                  <Send size={18} />
+                )}
+              </button>
             </form>
           </div>
         )}

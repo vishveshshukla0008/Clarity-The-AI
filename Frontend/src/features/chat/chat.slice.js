@@ -7,7 +7,8 @@ export const chatSlice = createSlice({
         currentChatId: null,
         messages: [],
         isChatLoading: false,
-        error: null
+        error: null,
+        currentModel: "gemini",
     },
     reducers: {
         setChats: (state, action) => {
@@ -24,10 +25,13 @@ export const chatSlice = createSlice({
         },
         setIsChatLoading: (state, action) => {
             state.isChatLoading = action.payload
+        },
+        setCurrentModel: (state, action) => {
+            state.currentModel = action.payload
         }
     }
 });
 
 
-export const { setChats, setError, setCurrentChatId, setMessages, setIsChatLoading } = chatSlice.actions;
+export const { setChats, setError, setCurrentChatId, setMessages, setIsChatLoading, setCurrentModel } = chatSlice.actions;
 export default chatSlice.reducer;

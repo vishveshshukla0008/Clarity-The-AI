@@ -17,7 +17,7 @@ import toast from "react-hot-toast";
 
 export const useChat = () => {
   const dispatch = useDispatch();
-  const { currentChatId, messages, chats } = useSelector((state) => state.chats);
+  const { currentChatId, messages, chats, currentModel } = useSelector((state) => state.chats);
 
   const handleSendMessage = useCallback(async (messageInput) => {
     try {
@@ -36,6 +36,7 @@ export const useChat = () => {
       const payload = {
         chatId: currentChatId,
         message: messageInput,
+        model: currentModel
       };
 
       // Send message to server

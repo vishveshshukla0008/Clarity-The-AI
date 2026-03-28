@@ -10,9 +10,12 @@ const validator = (req, res, next) => {
 
     next();
 };
+
+
 export const sendMessageValidation = [
     body("message").notEmpty().withMessage("message is required !").trim(),
     body("chatId").optional().customSanitizer((value) => value || null),
+    body("model").notEmpty().withMessage("Please enter the model you want to use !"),
     validator
 ]
 

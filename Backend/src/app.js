@@ -17,7 +17,7 @@ const app = express();
 const publicPath = path.join(__dirname, "..", "public");
 
 app.use(cors({
-  origin: true,
+  origin: "http://localhost:5173",
   credentials: true
 }));
 
@@ -25,17 +25,17 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.json());
 
-app.use(express.static(publicPath));
+// app.use(express.static(publicPath));
 
 app.use("/api/auth", authRouter);
 app.use("/api/chats", chatRouter);
 
-app.use(express.static(path.join(__dirname, "../public")));
-
-// SPA fallback
-app.use((req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
+// app.use(express.static(path.join(__dirname, "../public")));
+// 
+// // SPA fallback
+// app.use((req, res) => {
+//   res.sendFile(path.join(__dirname, "../public/index.html"));
+// });
 app.use(errorHandler);
 
 export default app;

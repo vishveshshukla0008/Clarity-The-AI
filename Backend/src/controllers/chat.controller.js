@@ -18,7 +18,7 @@ import { generateChatTitle, generateResponse } from "../services/ai.service.js";
  */
 
 export const sendMessageController = asyncWrapper(async (req, res) => {
-  const { message, chatId } = req.body;
+  const { message, chatId, model } = req.body;
 
   let activeChatId = null;
   let chat = null;
@@ -66,7 +66,7 @@ export const sendMessageController = asyncWrapper(async (req, res) => {
   const result = await generateResponse([
     ...messages,
     { content: message, role: "user" },
-  ]);
+  ], model);
 
   // Step 5: Save AI message
   await messageModel.create({
